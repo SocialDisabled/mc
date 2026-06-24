@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>电脑预算计算</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            padding: 50px 16px;
+        }
+        .wrap {
+            max-width: 460px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 32px 24px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.07);
+        }
+        h2 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 30px;
+            font-size: 22px;
+        }
+        .input-box {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            border: 1px solid #d0d3d9;
+            border-radius: 8px;
+            font-size: 17px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #4080ff;
+        }
+        #calcBtn {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            background-color: #4080ff;
+            color: white;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .desc {
+            margin-top: 22px;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h2>电脑预算计算</h2>
+        <div class="input-box">
+            <label>输入你的购机预算（元）</label>
+            <input type="number" id="money" placeholder="请输入数字，例如5000">
+        </div>
+        <button id="calcBtn">确认计算</button>
+        <p class="desc">计算器</p >
+    </div>
+
+    <script>
+        const inputMoney = document.getElementById('money');
+        const btn = document.getElementById('calcBtn');
+
+        btn.addEventListener('click', () => {
+            let num = inputMoney.value.trim();
+            if (!num) {
+                alert('请先输入预算金额！');
+                return;
+            }
+            alert(`购买${num}元预算的电脑要${num}元`);
+        })
+    </script>
+</body>
+</html>
