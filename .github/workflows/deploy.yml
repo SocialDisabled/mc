@@ -31,24 +31,12 @@ jobs:
           node-version: 20
 
 
-      - name: Install minify tools
-        run: |
-          npm install -g html-minifier-terser clean-css-cli terser
+      - name: Install dependencies
+        run: npm install
 
 
-      - name: Minify HTML
-        run: |
-          for f in index.html photo/index.html text/index.html; do
-            if [ -f "$f" ]; then
-              html-minifier-terser \
-                --collapse-whitespace \
-                --remove-comments \
-                --remove-attribute-quotes \
-                --minify-css true \
-                --minify-js true \
-                "$f" -o "$f"
-            fi
-          done
+      - name: Build (minify)
+        run: npm run build
 
 
       - name: Setup Pages
@@ -58,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'dist'
 
 
       - name: Deploy

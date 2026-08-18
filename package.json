@@ -1,0 +1,12 @@
+{
+  "name": "mc-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MC 私人联机服网站",
+  "scripts": {
+    "build": "node scripts/minify.mjs"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0"
+  }
+}
