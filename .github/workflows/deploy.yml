@@ -1,0 +1,66 @@
+name: Deploy Minified Site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+
+      - name: Install minify tools
+        run: |
+          npm install -g html-minifier-terser clean-css-cli terser
+
+
+      - name: Minify HTML
+        run: |
+          for f in index.html photo/index.html text/index.html; do
+            if [ -f "$f" ]; then
+              html-minifier-terser \
+                --collapse-whitespace \
+                --remove-comments \
+                --remove-attribute-quotes \
+                --minify-css true \
+                --minify-js true \
+                "$f" -o "$f"
+            fi
+          done
+
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

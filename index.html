@@ -1,25 +1,358 @@
 <!DOCTYPE html>
-<html lang="zh-CN
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网站</title>
-<meta name="description" content="这是一个网站。">
-    <meta name="keywords" content="个人网页, 作品展示, 信息">
-    <meta name="author" content="你的名字">
-    <link rel="stylesheet" href="#">
-<meta name="robots" content="index, follow">
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>MC 私人联机服</title>
+    <meta name="description" content="我的世界私人联机服务器，和朋友一起畅玩。" />
+    <meta name="keywords" content="我的世界, Minecraft, MC, 私人联机, 服务器" />
+    <meta name="author" content="MC 私人联机">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="script.js" defer></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            background: #1a1a1a;
+            color: #e8e8e8;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+        img { max-width: 100%; height: auto; }
+        a { color: #7df87d; text-decoration: none; }
+        a:hover { color: #b5ffb5; }
+
+        header {
+            background: linear-gradient(135deg, #2c2c2c, #3a3a3a);
+            border-bottom: 4px solid #5a5a5a;
+            padding: 16px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            color: #7df87d;
+            text-shadow: 2px 2px 0 #1a1a1a;
+            white-space: nowrap;
+        }
+        .menu-btn {
+            display: none;
+            background: none;
+            border: 2px solid #5a5a5a;
+            border-radius: 4px;
+            color: #e8e8e8;
+            font-size: 1.4rem;
+            line-height: 1;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 18px;
+        }
+        nav a {
+            display: block;
+            padding: 10px 14px;
+            min-height: 44px;
+            border: 2px solid #5a5a5a;
+            background: #2c2c2c;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            background: #3a3a3a;
+            border-color: #7df87d;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            background:
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url("https://media.wago.io/backgrounds/64e1b271-a2cc-4bb4-b0e5-0e3f1bd63f9e/170245707-64e1b271-a2cc-4bb4-b0e5-0e3f1bd63f9e.webp");
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding: clamp(40px, 10vw, 80px) 5%;
+        }
+        .hero h2 {
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            margin-bottom: 12px;
+            color: #fff;
+            text-shadow: 3px 3px 0 #1a1a1a;
+        }
+        .hero p {
+            font-size: clamp(1rem, 3.5vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            min-height: 48px;
+            background: #4caf50;
+            color: #fff;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 2px solid #1a1a1a;
+            cursor: pointer;
+            transition: background 0.2s;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .btn:hover { background: #66bb6a; color: #fff; }
+        .btn-copy {
+            background: #607d8b;
+        }
+        .btn-copy:hover { background: #78909c; }
+
+        section {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 5%;
+        }
+        section h2 {
+            font-size: clamp(1.3rem, 5vw, 1.6rem);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #4caf50;
+            display: inline-block;
+        }
+        .card {
+            background: #242424;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .info-item {
+            background: #2c2c2c;
+            border: 2px solid #444;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+        .info-item .label { color: #aaa; font-size: 0.85rem; }
+        .info-item .value {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: bold;
+            color: #7df87d;
+            word-break: break-all;
+        }
+
+        .ip-box {
+            background: #111;
+            border: 2px solid #4caf50;
+            border-radius: 6px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-family: Consolas, monospace;
+            font-size: clamp(0.95rem, 4vw, 1.2rem);
+            color: #7df87d;
+        }
+        .ip-box span { word-break: break-all; }
+
+        ul.list { margin: 8px 0 0 20px; }
+        ul.list li { margin-bottom: 6px; }
+
+        .rules ol { margin: 8px 0 0 20px; }
+        .rules li { margin-bottom: 6px; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #444;
+            margin-top: 40px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn { display: block; }
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                gap: 0;
+                background: #2c2c2c;
+                border-bottom: 4px solid #5a5a5a;
+            }
+            nav.open ul {
+                display: flex;
+            }
+            nav ul li { border-bottom: 1px solid #444; }
+            nav ul li:last-child { border-bottom: none; }
+            nav a {
+                border: none;
+                border-radius: 0;
+                padding: 14px 5%;
+                min-height: 50px;
+                text-align: center;
+            }
+            nav a:hover {
+                background: #3a3a3a;
+                transform: none;
+            }
+            .ip-box { flex-direction: column; align-items: stretch; text-align: center; }
+            .btn-copy { width: 100%; }
+            .card { padding: 16px; }
+            section { margin: 28px auto; }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>欢迎</h1>
-        <nav>
+        <h1>MC 私人联机服</h1>
+        <button class="menu-btn" id="menuBtn" aria-label="菜单">&#9776;</button>
+        <nav id="nav">
             <ul>
-                <li><a href="#">无</a></li>
-                <li><a href="#portfolio">无</a></li>
-                <li><a href="#contact">无</a></li>
+                <li><a href="https://kurlet.com">返回主站</a></li>
+                <li><a href="#home">首页</a></li>
+                <li><a href="#info">服务器信息</a></li>
+                <li><a href="#join">怎么加入</a></li>
+                <li><a href="#rules">规则</a></li>
             </ul>
         </nav>
     </header>
+
+    <main>
+        <section class="hero" id="home">
+            <h2>欢迎来到我们的 Minecraft 私人服</h2>
+            <p>这里是专属于朋友们的生存世界，一起来冒险、建造、创造属于我们的回忆吧！</p>
+            <a class="btn" href="#join">立即加入</a>
+        </section>
+
+        <section id="info">
+            <h2>服务器信息</h2>
+            <div class="card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">服务器版本</div>
+                        <div class="value">1.20.1</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">游戏模式</div>
+                        <div class="value">生存模式</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">最大在线</div>
+                        <div class="value">10 人</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">启用模组</div>
+                        <div class="value">Forge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="join">
+            <h2>怎么加入</h2>
+            <div class="card">
+                <p>在游戏中点击「多人游戏」→「添加服务器」，填入下面的地址即可：</p>
+                <div class="ip-box">
+                    <span>play.example.com:25565</span>
+                    <button class="btn btn-copy" id="copyBtn">复制地址</button>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">服务器状态</div>
+                        <div class="value" id="status">检测中...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">在线玩家</div>
+                        <div class="value" id="players">-</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rules">
+            <h2>服务器规则</h2>
+            <div class="card rules">
+                <ol>
+                    <li>互相尊重，禁止辱骂、嘲讽他人。</li>
+                    <li>禁止作弊、使用外挂和作弊模组。</li>
+                    <li>尊重他人建筑，未经允许不破坏。</li>
+                    <li>不刷屏、不乱放广告链接。</li>
+                    <li>遇到问题联系管理员处理。</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>MC 私人联机服 &copy; <span id="year"></span></p>
+        <p>仅供好友娱乐使用 · <a href="https://kurlet.com">返回主站 kurlet.com</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        var statusEl = document.getElementById('status');
+        var playersEl = document.getElementById('players');
+
+        function checkServer() {
+            var host = 'play.example.com';
+            var port = 25565;
+            fetch('https://api.mcsrvstat.us/2/' + host + ':' + port)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.online) {
+                        statusEl.textContent = '在线';
+                        statusEl.style.color = '#7df87d';
+                        playersEl.textContent = data.players.online + ' / ' + data.players.max;
+                    } else {
+                        statusEl.textContent = '离线';
+                        statusEl.style.color = '#ff5252';
+                        playersEl.textContent = '-';
+                    }
+                })
+                .catch(function () {
+                    statusEl.textContent = '无法检测';
+                    statusEl.style.color = '#ffb300';
+                });
+        }
+        checkServer();
+        setInterval(checkServer, 60000);
+
+        document.getElementById('copyBtn').addEventListener('click', function () {
+            navigator.clipboard.writeText('play.example.com:25565').then(function () {
+                var btn = document.getElementById('copyBtn');
+                btn.textContent = '已复制!';
+                setTimeout(function () { btn.textContent = '复制地址'; }, 1500);
+            });
+        });
+
+        var menuBtn = document.getElementById('menuBtn');
+        var nav = document.getElementById('nav');
+        menuBtn.addEventListener('click', function () {
+            nav.classList.toggle('open');
+        });
+        nav.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A') {
+                nav.classList.remove('open');
+            }
+        });
+    </script>
 </body>
+</html>
